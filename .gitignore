@@ -53,3 +53,8 @@ server_log.txt
 CURSOR_RULES.md
 /.claude/worktrees/
 /.history
+
+#output
+/output/agentradar/
+
+agentradar_docs/AgentRadar_RESUME_DRAFT.md

@@ -33,6 +33,9 @@ from .utils.enum import ReportSource, ReportType, Tone
 from .utils.llm import create_chat_completion
 from .vector_store import VectorStoreWrapper
 
+from .actions.source_router import route_retrievers
+
+from .actions.evidence_store import EvidenceStore
 
 class GPTResearcher:
     """Main GPT Researcher agent class.
@@ -149,6 +152,7 @@ class GPTResearcher:
         self.complement_source_urls = complement_source_urls
         self.query_domains = query_domains or []
         self.research_sources = []  # The list of scraped sources including title, content and images
+        self.evidence_store = EvidenceStore()
         self.research_images = []  # The list of selected research images
         self.documents = documents
         self.vector_store = VectorStoreWrapper(vector_store) if vector_store else None
@@ -173,7 +177,10 @@ class GPTResearcher:
         if mcp_configs:
             self._process_mcp_configs(mcp_configs)
         
-        self.retrievers = get_retrievers(self.headers, self.cfg)
+        self.retrievers = route_retrievers(
+            self.query,
+            get_retrievers(self.headers, self.cfg)
+        )
         self.memory = Memory(
             self.cfg.embedding_provider, self.cfg.embedding_model, **self.cfg.embedding_kwargs
         )

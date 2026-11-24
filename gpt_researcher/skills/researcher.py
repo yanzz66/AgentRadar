@@ -848,6 +848,15 @@ class ResearchConductor:
                 if not search_results:
                     continue
 
+                store = getattr(self.researcher, "evidence_store", None)
+
+                if store is not None:
+                    store.add_search_results(
+                        source=retriever_class.__name__,
+                        query=query,
+                        results=search_results,
+                    )
+
                 # Does this retriever return URLs to scrape, or content it
                 # already fetched? Prefer an explicit declaration
                 # (BaseRetriever.requires_scraping); fall back to the legacy

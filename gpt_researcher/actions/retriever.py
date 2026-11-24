@@ -120,7 +120,9 @@ def get_retriever(retriever: str):
             from gpt_researcher.retrievers import GetXAPISearch
 
             return GetXAPISearch
-
+        case "github":
+            from gpt_researcher.retrievers.github.github_search import GitHubSearch
+            return GitHubSearch
         case _:
             return None
 
